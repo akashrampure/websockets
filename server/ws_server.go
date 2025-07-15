@@ -50,7 +50,6 @@ type WebSocketServer struct {
 	onConnect     func(clientID string)
 	onDisconnect  func(clientID string, err error)
 	logger        *log.Logger
-	Message       Message
 }
 
 func NewWebSocketServer(config WebSocketConfig, logger *log.Logger) *WebSocketServer {
@@ -72,7 +71,6 @@ func NewWebSocketServer(config WebSocketConfig, logger *log.Logger) *WebSocketSe
 		onConnect:    func(clientID string) {},
 		onDisconnect: func(clientID string, err error) {},
 		logger:       logger,
-		Message:      Message{},
 	}
 }
 

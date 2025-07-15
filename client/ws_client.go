@@ -48,7 +48,6 @@ type SubscribeWS struct {
 	logger *log.Logger
 	conn   *websocket.Conn
 
-	Message   Message
 	ClientID  string
 	onReceive MessageHandler
 }
@@ -59,7 +58,6 @@ func NewSubscribeWS(config SubscribeConfig, clientID string, logger *log.Logger)
 		ClientID: clientID,
 		logger:   logger,
 		connMu:   sync.RWMutex{},
-		Message:  Message{},
 	}
 }
 

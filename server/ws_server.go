@@ -1,13 +1,16 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -236,9 +239,22 @@ func (s *WebSocketServer) Start() {
 			}
 		})
 
+		sigint := make(chan os.Signal, 1)
+		signal.Notify(sigint, syscall.SIGINT, syscall.SIGTERM)
+
+		go func() {
+			<-sigint
+			s.logger.Println("Shutting down the server...")
+			if err := srv.Shutdown(context.Background()); err != nil {
+				s.logger.Printf("Error shutting down server: %v\n", err)
+			}
+			os.Exit(0)
+		}()
+
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			s.logger.Println("server error:", err)
+		} else {
+			fmt.Println("Server started on port", s.Config.Port)
 		}
-
 	})
 }

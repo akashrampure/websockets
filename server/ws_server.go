@@ -253,8 +253,6 @@ func (s *WebSocketServer) Start() {
 
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			s.logger.Println("server error:", err)
-		} else {
-			fmt.Println("Server started on port", s.Config.Port)
 		}
 	})
 }

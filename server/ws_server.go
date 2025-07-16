@@ -253,6 +253,15 @@ func (s *WebSocketServer) Start() {
 		go func() {
 			<-sigint
 			s.logger.Println("Shutting down the server...")
+
+			s.connectionsMu.Lock()
+			defer s.connectionsMu.Unlock()
+
+			for clientID, conn := range s.connections {
+				conn.Close()
+				delete(s.connections, clientID)
+			}
+
 			if err := srv.Shutdown(context.Background()); err != nil {
 				s.logger.Printf("Error shutting down server: %v\n", err)
 			}

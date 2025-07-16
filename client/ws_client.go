@@ -158,16 +158,6 @@ func (s *SubscribeWS) SendMessage(receiver string, data interface{}) {
 }
 
 func (s *SubscribeWS) Start() {
-	go func() {
-		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, syscall.SIGINT, syscall.SIGTERM)
-
-		<-sigint
-
-		s.Close()
-		s.logger.Println("Shutting down gracefully...")
-		os.Exit(0)
-	}()
 
 	go func() {
 		for i := 0; i < s.Config.MaxRetries; i++ {
@@ -182,6 +172,15 @@ func (s *SubscribeWS) Start() {
 
 		s.Close()
 		s.logger.Println("Max retries reached. Exiting...")
-		os.Exit(1)
+		os.Exit(0)
 	}()
+
+	sigint := make(chan os.Signal, 1)
+	signal.Notify(sigint, syscall.SIGINT, syscall.SIGTERM)
+
+	<-sigint
+
+	s.Close()
+	s.logger.Println("Shutting down gracefully...")
+	os.Exit(0)
 }

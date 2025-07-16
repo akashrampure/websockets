@@ -199,7 +199,7 @@ func (s *WebSocketServer) Start() {
 	serverOnce.Do(func() {
 		mux := http.NewServeMux()
 		mux.HandleFunc(s.Config.Path, s.wsHandler)
-		mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`{"status":"ok"}`))
 		})
 

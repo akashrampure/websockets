@@ -54,6 +54,14 @@ type SubscribeWS struct {
 	onReceive MessageHandler
 }
 
+func CreateLoggerFile(path string) (*log.Logger, error) {
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		return nil, err
+	}
+	return log.New(file, "", log.LstdFlags), nil
+}
+
 func NewSubscribeWS(config SubscribeConfig, clientID string, logger *log.Logger) *SubscribeWS {
 	if logger == nil {
 		logger = log.New(os.Stdout, "", log.LstdFlags)

@@ -236,10 +236,9 @@ func (s *WebSocketServer) Start() {
 			}
 		})
 
-		go func() {
-			if err := srv.ListenAndServe(); err != nil {
-				s.logger.Println("server closed:", err)
-			}
-		}()
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			s.logger.Println("server error:", err)
+		}
+
 	})
 }

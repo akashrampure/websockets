@@ -38,8 +38,8 @@ func NewWebSocketConfig(port, path string) WebSocketConfig {
 	return WebSocketConfig{
 		Port:            port,
 		Path:            path,
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
+		ReadBufferSize:  1024 * 1024,
+		WriteBufferSize: 1024 * 1024,
 		AllowedOrigins:  []string{"*"},
 	}
 }
